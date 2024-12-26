@@ -6,3 +6,8 @@ new entry "Gale_WildMagic"
 type "PassiveData"
 using "WildMagic"
 data "Description" "h5abfc877gb1cfg447bga8a8gb30b78064718"
+
+new entry "GALE_WILDMAGIC_PERMANENT_REMOVAL"
+type "StatusData"
+data "StatusType" "BOOST"
+data "StatusPropertyFlags" "DisableOverhead;DisablePortraitIndicator;DisableCombatlog"
