@@ -2,14 +2,13 @@
 local galeCharID = "S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604"
 local GALE_MAGIC_ALLERGY_PASSIVE = "GALE_GOON_MAGICALLERGY_UNLOCK"
 local EXISTING_MAGIC_ALLERGY_PASSIVE = "GOON_MAGICALLERGY_UNLOCK"
-local WILD_MAGIC_PASSIVE = "WildMagic"
+local GALE_WILD_MAGIC_PASSIVE = "Gale_WildMagic"
+local EXISTING_WILD_MAGIC_PASSIVE = "WildMagic"
 local GALE_STATUSES = {"ORI_GALE_BOMB3", "ORI_GALE_BOMB2", "ORI_GALE_BOMB1"}
 
 -- Function to check and update Gale's Magic Allergy passive
 local function updateGaleMagicAllergyPassive()
-    -- Check if the existing Magic Allergy passive is present
     if Osi.HasPassive(galeCharID, EXISTING_MAGIC_ALLERGY_PASSIVE) == 1 then
-        -- Do not apply GALE_GOON_MAGICALLERGY_UNLOCK if the existing passive exists
         Osi.RemovePassive(galeCharID, GALE_MAGIC_ALLERGY_PASSIVE)
         return
     end
@@ -29,9 +28,14 @@ local function updateGaleMagicAllergyPassive()
     end
 end
 
--- Function to apply WildMagic passive
-local function applyWildMagicPassive()
-    Osi.AddPassive(galeCharID, WILD_MAGIC_PASSIVE)
+-- Function to apply Gale_WildMagic passive
+local function applyGaleWildMagicPassive()
+    if Osi.HasPassive(galeCharID, EXISTING_WILD_MAGIC_PASSIVE) == 1 then
+        -- Do not apply Gale_WildMagic if WildMagic already exists
+        Osi.RemovePassive(galeCharID, GALE_WILD_MAGIC_PASSIVE)
+        return
+    end
+    Osi.AddPassive(galeCharID, GALE_WILD_MAGIC_PASSIVE)
 end
 
 -- Event Listeners
@@ -48,6 +52,6 @@ Ext.Osiris.RegisterListener("StatusRemoved", 4, "after", function(target, status
 end)
 
 Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "after", function(level_name, is_editor_mode)
-    applyWildMagicPassive()
+    applyGaleWildMagicPassive()
     updateGaleMagicAllergyPassive()
 end)

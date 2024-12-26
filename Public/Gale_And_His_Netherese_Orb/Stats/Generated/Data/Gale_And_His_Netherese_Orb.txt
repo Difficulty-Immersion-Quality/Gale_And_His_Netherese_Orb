@@ -2,3 +2,7 @@ new entry "GALE_GOON_MAGICALLERGY_UNLOCK"
 type "PassiveData"
 using "GOON_MAGICALLERGY_UNLOCK"
 
+new entry "Gale_WildMagic"
+type "PassiveData"
+using "WildMagic"
+data "Description" "h5abfc877gb1cfg447bga8a8gb30b78064718"
