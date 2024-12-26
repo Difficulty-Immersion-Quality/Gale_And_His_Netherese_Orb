@@ -1,0 +1,4 @@
+new entry "GALE_GOON_MAGICALLERGY_UNLOCK"
+type "PassiveData"
+using "GOON_MAGICALLERGY_UNLOCK"
+
