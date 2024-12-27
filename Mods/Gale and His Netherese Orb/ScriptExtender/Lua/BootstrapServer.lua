@@ -86,31 +86,25 @@ Ext.Osiris.RegisterListener("StatusRemoved", 4, "after", function(target, status
     end
 end)
 
--- Listener for when gameplay starts
 Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "after", function(level_name, is_editor_mode)
     Ext.Utils.Print("[DEBUG] LevelGameplayStarted triggered for level: " .. level_name)
+    Ext.Utils.Print("[DEBUG] Checking statuses and passives for Gale.")
 
-    if not Osi.CharacterIsDead(galeCharID) then
-        Ext.Utils.Print("[DEBUG] Gale is alive. Checking statuses and passives.")
-
-        if Osi.HasActiveStatus(galeCharID, GALE_WILDMAGIC_PERMANENT_REMOVAL) == 1 then
-            Ext.Utils.Print("[DEBUG] Permanent removal detected. Ensuring passives are cleared.")
-            removeGaleWildMagic()
-            if Osi.HasPassive(galeCharID, GALE_MAGIC_ALLERGY_UNLOCK) == 1 then
-                Osi.RemovePassive(galeCharID, GALE_MAGIC_ALLERGY_UNLOCK)
-                Ext.Utils.Print("[DEBUG] Magic Allergy removed on gameplay start.")
-            end
-        else
-            if Osi.HasActiveStatus(galeCharID, GALE_BOMB1_STATUS) == 1 or 
-               Osi.HasActiveStatus(galeCharID, GALE_BOMB2_STATUS) == 1 or 
-               Osi.HasActiveStatus(galeCharID, GALE_BOMB3_STATUS) == 1 then
-                Ext.Utils.Print("[DEBUG] Bomb status detected on gameplay start. Applying Gale_WildMagic.")
-                applyGaleWildMagic()
-            end
-
-            updateMagicAllergy()
+    if Osi.HasActiveStatus(galeCharID, GALE_WILDMAGIC_PERMANENT_REMOVAL) == 1 then
+        Ext.Utils.Print("[DEBUG] Permanent removal detected. Ensuring passives are cleared.")
+        removeGaleWildMagic()
+        if Osi.HasPassive(galeCharID, GALE_MAGIC_ALLERGY_UNLOCK) == 1 then
+            Osi.RemovePassive(galeCharID, GALE_MAGIC_ALLERGY_UNLOCK)
+            Ext.Utils.Print("[DEBUG] Magic Allergy removed on gameplay start.")
         end
     else
-        Ext.Utils.Print("[DEBUG] Gale is dead or not present. Skipping status checks.")
+        if Osi.HasActiveStatus(galeCharID, GALE_BOMB1_STATUS) == 1 or 
+           Osi.HasActiveStatus(galeCharID, GALE_BOMB2_STATUS) == 1 or 
+           Osi.HasActiveStatus(galeCharID, GALE_BOMB3_STATUS) == 1 then
+            Ext.Utils.Print("[DEBUG] Bomb status detected on gameplay start. Applying Gale_WildMagic.")
+            applyGaleWildMagic()
+        end
+
+        updateMagicAllergy()
     end
 end)
