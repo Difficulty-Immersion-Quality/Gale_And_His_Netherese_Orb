@@ -25,12 +25,12 @@ local function updateMagicAllergy()
 
     -- Early exit if permanent removal is active
     if permanentRemovalActive then
-        -- If Magic Allergy is already applied, remove it
+        -- Remove Magic Allergy if it is applied
         if Osi.HasActiveStatus(galeCharID, GALE_GOON_MAGICALLERGY_UNLOCK_STATUS) == 1 then
             Osi.RemoveStatus(galeCharID, GALE_GOON_MAGICALLERGY_UNLOCK_STATUS)
             Ext.Utils.Print("[DEBUG] Magic Allergy status removed due to permanent removal.")
         end
-        return -- Exit early; no further processing needed
+        return
     end
 
     -- Apply or remove Magic Allergy based on bomb status presence
@@ -49,38 +49,57 @@ local function updateMagicAllergy()
     end
 end
 
--- Function to manage Wild Magic status (with checks for Bomb and Permanent Removal)
+-- Function to manage Wild Magic when Bomb3 is removed
+local function handleBomb3Removal()
+    if Osi.HasPassive(galeCharID, "Gale_WildMagic") == 1 then
+        Osi.RemovePassive(galeCharID, "Gale_WildMagic")
+        Ext.Utils.Print("[DEBUG] Gale_WildMagic removed explicitly due to Bomb3 being removed.")
+    end
+end
+
+-- Listener for Bomb3 status removal
+Ext.Osiris.RegisterListener("StatusRemoved", 4, "after", function(target, status)
+    if target == galeCharID and status == GALE_BOMB3_STATUS then
+        Ext.Utils.Print("[DEBUG] Bomb3 status removed for Gale.")
+        handleBomb3Removal()
+    end
+end)
+
+-- Apply Wild Magic if any Bomb is active
 local function updateWildMagic()
     if not galeCharID or galeCharID == "" then
         Ext.Utils.Print("[ERROR] Gale's character ID is not valid!")
         return
     end
 
-    -- Check if any Bomb status is active
-    local hasBombStatus = Osi.HasActiveStatus(galeCharID, GALE_BOMB1_STATUS) == 1 or 
-                          Osi.HasActiveStatus(galeCharID, GALE_BOMB2_STATUS) == 1 or 
-                          Osi.HasActiveStatus(galeCharID, GALE_BOMB3_STATUS) == 1
+    -- Check Bomb statuses
+    local hasBomb1Status = Osi.HasActiveStatus(galeCharID, GALE_BOMB1_STATUS) == 1
+    local hasBomb2Status = Osi.HasActiveStatus(galeCharID, GALE_BOMB2_STATUS) == 1
+    local hasBomb3Status = Osi.HasActiveStatus(galeCharID, GALE_BOMB3_STATUS) == 1
+    local permanentRemovalActive = Osi.HasActiveStatus(galeCharID, GALE_WILDMAGIC_PERMANENT_REMOVAL) == 1
 
-    -- If Bomb status is present, apply Wild Magic if not already applied
-    if hasBombStatus then
-        if Osi.HasPassive(galeCharID, "Gale_WildMagic") == 0 then
-            Osi.AddPassive(galeCharID, "Gale_WildMagic")
-            Ext.Utils.Print("[DEBUG] Gale_WildMagic applied.")
-        end
-    elseif Osi.HasActiveStatus(galeCharID, GALE_WILDMAGIC_PERMANENT_REMOVAL) == 1 then
-        -- Remove Wild Magic if Permanent Removal status is active
-        if Osi.HasPassive(galeCharID, "Gale_WildMagic") == 1 then
+    -- Check if Wild Magic is already applied
+    local hasWildMagicPassive = Osi.HasPassive(galeCharID, "Gale_WildMagic") == 1
+
+    -- Remove Wild Magic if permanent removal is active
+    if permanentRemovalActive then
+        if hasWildMagicPassive then
             Osi.RemovePassive(galeCharID, "Gale_WildMagic")
             Ext.Utils.Print("[DEBUG] Gale_WildMagic removed due to permanent removal status.")
         end
-    elseif Osi.HasActiveStatus(galeCharID, GALE_BOMB3_STATUS) == 0 then
-        -- Remove Wild Magic if Bomb3 status is removed
-        if Osi.HasPassive(galeCharID, "Gale_WildMagic") == 1 then
-            Osi.RemovePassive(galeCharID, "Gale_WildMagic")
-            Ext.Utils.Print("[DEBUG] Gale_WildMagic removed due to Bomb3 status removal.")
+        return
+    end
+
+    -- Apply Wild Magic if any Bomb status is active
+    if hasBomb1Status or hasBomb2Status or hasBomb3Status then
+        if not hasWildMagicPassive then
+            Osi.AddPassive(galeCharID, "Gale_WildMagic")
+            Ext.Utils.Print("[DEBUG] Gale_WildMagic applied due to Bomb status.")
         end
     end
 end
+
+
 
 -- Function to trigger updates on bomb status changes
 local function onBombStatusChange(target, status)
@@ -90,8 +109,8 @@ local function onBombStatusChange(target, status)
 
         -- Only update Magic Allergy and Wild Magic if the bomb status has changed
         if status == GALE_BOMB1_STATUS or status == GALE_BOMB2_STATUS or status == GALE_BOMB3_STATUS then
-            updateWildMagic()
             updateMagicAllergy()
+            updateWildMagic()
         end
     end
 end
