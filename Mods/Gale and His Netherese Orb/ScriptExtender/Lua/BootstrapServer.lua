@@ -70,11 +70,13 @@ Ext.Osiris.RegisterListener("StatusRemoved", 4, "after", function(target, status
             Ext.Utils.Print("[DEBUG] GALE_GOON_MAGICALLERGY_UNLOCK_STATUS removed explicitly.")
         end
 
-        -- Ensure Magic Allergy aura is removed
-        if Osi.HasActiveStatus(galeCharID, "GOON_MAGICALLERGY_AURA") == 1 then
-            Osi.RemoveStatus(galeCharID, "GOON_MAGICALLERGY_AURA")
-            Ext.Utils.Print("[DEBUG] GOON_MAGICALLERGY_AURA removed explicitly.")
-        end
+        -- Delay the removal of Magic Allergy Aura
+        Ext.Timer.WaitFor(500, function()
+            if Osi.HasActiveStatus(target, "GOON_MAGICALLERGY_AURA") == 1 then
+                Osi.RemoveStatus(target, "GOON_MAGICALLERGY_AURA")
+                Ext.Utils.Print("[DEBUG] GOON_MAGICALLERGY_AURA removed after delay.")
+            end
+        end)
     end
 end)
 
