@@ -1,7 +1,3 @@
-new entry "GALE_GOON_MAGICALLERGY_UNLOCK"
-type "PassiveData"
-using "GOON_MAGICALLERGY_UNLOCK"
-
 new entry "Gale_WildMagic"
 type "PassiveData"
 using "WildMagic"
@@ -30,3 +26,15 @@ type "StatusData"
 data "StatusType" "BOOST"
 using "ORI_GALE_BOMB3"
 data "Description" "h95f2c1f4geab8g4a79g9ab0g621bd5654902"
+
+// ==================================== Not in use ====================================
+
+new entry "GALE_GOON_MAGICALLERGY_UNLOCK_STATUS"
+type "StatusData"
+data "StatusType" "BOOST"
+data "StatusPropertyFlags" "DisableOverhead;DisablePortraitIndicator;DisableCombatlog"
+data "Passives" "GOON_MAGICALLERGY_UNLOCK"
+data "OnRemoveFunctors" "RemoveStatus(GOON_MAGICALLERGY_AURA)"
+
+new entry "GALE_GOON_MAGICALLERGY_UNLOCK"
+type "PassiveData"
