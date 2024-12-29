@@ -71,7 +71,7 @@ local function updateMagicAndWildMagic()
     end
 end
 
--- Listener for bomb status application
+-- Listener for bomb status application and removal (combined)
 Ext.Osiris.RegisterListener("StatusApplied", 4, "after", function(target, status)
     if target == galeCharID then
         -- Check if the applied status is one of the bomb statuses
@@ -85,10 +85,10 @@ Ext.Osiris.RegisterListener("StatusApplied", 4, "after", function(target, status
     end
 end)
 
--- Listener for bomb status application
+-- Combined Listener for bomb status removal
 Ext.Osiris.RegisterListener("StatusRemoved", 4, "after", function(target, status)
     if target == galeCharID then
-        -- Check if the applied status is one of the bomb statuses
+        -- Check if the removed status is one of the bomb statuses
         for _, bombStatus in ipairs(GALE_BOMB_STATUSES) do
             if status == bombStatus then
                 Ext.Utils.Print("[DEBUG] Bomb status removed: " .. status)
@@ -96,15 +96,8 @@ Ext.Osiris.RegisterListener("StatusRemoved", 4, "after", function(target, status
                 break
             end
         end
-    end
-end)
 
--- Handle Bomb3-specific removal logic
-Ext.Osiris.RegisterListener("StatusRemoved", 4, "after", function(target, status)
-    if target == galeCharID then
-        Ext.Utils.Print("[DEBUG] Status removed: " .. status)
-
-        -- Handle Bomb3 removal specifically
+        -- Handle Bomb3-specific removal logic
         if status == "ORI_GALE_BOMB3" then
             Ext.Utils.Print("[DEBUG] Bomb3 status removed for Gale.")
             
@@ -113,6 +106,27 @@ Ext.Osiris.RegisterListener("StatusRemoved", 4, "after", function(target, status
                 Osi.RemovePassive(galeCharID, GALE_WILDMAGIC_PASSIVE)
                 Ext.Utils.Print("[DEBUG] Wild Magic removed due to Bomb3 removal.")
             end
+
+            -- Ensure Magic Allergy is updated after Bomb3 removal
+            if Osi.HasActiveStatus(galeCharID, GOON_MAGICALLERGY_AURA) == 1 then
+                Osi.RemoveStatus(galeCharID, GOON_MAGICALLERGY_AURA)
+                Ext.Utils.Print("[DEBUG] Magic Allergy removed due to Bomb3 removal.")
+            end
         end
+    end
+end)
+
+Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "after", function()
+    --Ext.Utils.Print("Event triggered: LevelGameplayStarted")
+    updateLoneWolfStatus()
+end)
+
+-- Listener for when the level gameplay starts
+Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "after", function()
+    -- Check if Gale has the GALE_GOON_MAGICALLERGY_UNLOCK passive
+    if Osi.HasPassive(galeCharID, "GALE_GOON_MAGICALLERGY_UNLOCK") == 1 then
+        -- Remove the passive
+        Osi.RemovePassive(galeCharID, "GALE_GOON_MAGICALLERGY_UNLOCK")
+        Ext.Utils.Print("[DEBUG] GALE_GOON_MAGICALLERGY_UNLOCK passive removed at level start.")
     end
 end)
