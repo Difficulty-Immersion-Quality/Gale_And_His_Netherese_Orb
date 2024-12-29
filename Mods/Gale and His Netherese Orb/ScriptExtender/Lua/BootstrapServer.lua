@@ -2,11 +2,10 @@
 local galeCharID = "S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604"
 
 -- Constants for statuses and passives
-local GALE_GOON_MAGICALLERGY_UNLOCK_STATUS = "GALE_GOON_MAGICALLERGY_UNLOCK_STATUS"
+local GOON_MAGICALLERGY_AURA = "GOON_MAGICALLERGY_AURA"
 local GALE_WILDMAGIC_PERMANENT_REMOVAL = "GALE_WILDMAGIC_PERMANENT_REMOVAL"
 local GALE_BOMB_STATUSES = { "ORI_GALE_BOMB1", "ORI_GALE_BOMB2", "ORI_GALE_BOMB3" }
 local GALE_WILDMAGIC_PASSIVE = "Gale_WildMagic"
-local GOON_MAGICALLERGY_AURA = "GOON_MAGICALLERGY_AURA"
 
 -- Function to check if any bomb status is active
 local function isBombActive()
@@ -31,8 +30,8 @@ local function updateMagicAndWildMagic()
     -- Handle Magic Allergy and Wild Magic when permanent removal is active
     if permanentRemovalActive then
         -- Remove Magic Allergy
-        if Osi.HasActiveStatus(galeCharID, GALE_GOON_MAGICALLERGY_UNLOCK_STATUS) == 1 then
-            Osi.RemoveStatus(galeCharID, GALE_GOON_MAGICALLERGY_UNLOCK_STATUS)
+        if Osi.HasActiveStatus(galeCharID, GOON_MAGICALLERGY_AURA) == 1 then
+            Osi.RemoveStatus(galeCharID, GOON_MAGICALLERGY_AURA)
             Ext.Utils.Print("[DEBUG] Magic Allergy removed due to permanent removal.")
         end
 
@@ -46,13 +45,13 @@ local function updateMagicAndWildMagic()
 
     -- Update Magic Allergy based on bomb status
     if hasBombStatus then
-        if Osi.HasActiveStatus(galeCharID, GALE_GOON_MAGICALLERGY_UNLOCK_STATUS) == 0 then
-            Osi.ApplyStatus(galeCharID, GALE_GOON_MAGICALLERGY_UNLOCK_STATUS, -1, 1)
+        if Osi.HasActiveStatus(galeCharID, GOON_MAGICALLERGY_AURA) == 0 then
+            Osi.ApplyStatus(galeCharID, GOON_MAGICALLERGY_AURA, -1, 1)
             Ext.Utils.Print("[DEBUG] Magic Allergy applied.")
         end
     else
-        if Osi.HasActiveStatus(galeCharID, GALE_GOON_MAGICALLERGY_UNLOCK_STATUS) == 1 then
-            Osi.RemoveStatus(galeCharID, GALE_GOON_MAGICALLERGY_UNLOCK_STATUS)
+        if Osi.HasActiveStatus(galeCharID, GOON_MAGICALLERGY_AURA) == 1 then
+            Osi.RemoveStatus(galeCharID, GOON_MAGICALLERGY_AURA)
             Ext.Utils.Print("[DEBUG] Magic Allergy removed.")
         end
     end
@@ -86,23 +85,34 @@ Ext.Osiris.RegisterListener("StatusApplied", 4, "after", function(target, status
     end
 end)
 
+-- Listener for bomb status application
+Ext.Osiris.RegisterListener("StatusRemoved", 4, "after", function(target, status)
+    if target == galeCharID then
+        -- Check if the applied status is one of the bomb statuses
+        for _, bombStatus in ipairs(GALE_BOMB_STATUSES) do
+            if status == bombStatus then
+                Ext.Utils.Print("[DEBUG] Bomb status removed: " .. status)
+                updateMagicAndWildMagic()
+                break
+            end
+        end
+    end
+end)
 
--- Handle Bomb3-specific removal
+-- Handle Bomb3-specific removal logic
 Ext.Osiris.RegisterListener("StatusRemoved", 4, "after", function(target, status)
     if target == galeCharID then
         Ext.Utils.Print("[DEBUG] Status removed: " .. status)
 
-        -- Remove Wild Magic when Bomb3 is removed
+        -- Handle Bomb3 removal specifically
         if status == "ORI_GALE_BOMB3" then
             Ext.Utils.Print("[DEBUG] Bomb3 status removed for Gale.")
+            
+            -- Remove Wild Magic permanently when Bomb3 is removed
             if Osi.HasPassive(galeCharID, GALE_WILDMAGIC_PASSIVE) == 1 then
                 Osi.RemovePassive(galeCharID, GALE_WILDMAGIC_PASSIVE)
                 Ext.Utils.Print("[DEBUG] Wild Magic removed due to Bomb3 removal.")
             end
         end
-
-        -- Update Magic Allergy and Wild Magic
-        updateMagicAndWildMagic()
     end
 end)
-
