@@ -57,13 +57,28 @@ local function handleBomb3Removal()
     end
 end
 
--- Listener for Bomb3 status removal
 Ext.Osiris.RegisterListener("StatusRemoved", 4, "after", function(target, status)
-    if target == galeCharID and status == GALE_BOMB3_STATUS then
+    if target == galeCharID and status == "ORI_GALE_BOMB3" then
         Ext.Utils.Print("[DEBUG] Bomb3 status removed for Gale.")
+        
+        -- Handle Wild Magic removal
         handleBomb3Removal()
+
+        -- Ensure Magic Allergy unlock status is removed
+        if Osi.HasActiveStatus(galeCharID, "GALE_GOON_MAGICALLERGY_UNLOCK_STATUS") == 1 then
+            Osi.RemoveStatus(galeCharID, "GALE_GOON_MAGICALLERGY_UNLOCK_STATUS")
+            Ext.Utils.Print("[DEBUG] GALE_GOON_MAGICALLERGY_UNLOCK_STATUS removed explicitly.")
+        end
+
+        -- Ensure Magic Allergy aura is removed
+        if Osi.HasActiveStatus(galeCharID, "GOON_MAGICALLERGY_AURA") == 1 then
+            Osi.RemoveStatus(galeCharID, "GOON_MAGICALLERGY_AURA")
+            Ext.Utils.Print("[DEBUG] GOON_MAGICALLERGY_AURA removed explicitly.")
+        end
     end
 end)
+
+
 
 -- Apply Wild Magic if any Bomb is active
 local function updateWildMagic()
