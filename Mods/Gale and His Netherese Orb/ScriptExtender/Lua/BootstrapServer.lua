@@ -9,107 +9,74 @@ local GALE_WILDMAGIC_PERMANENT_REMOVAL = "GALE_WILDMAGIC_PERMANENT_REMOVAL"
 
 Ext.Utils.Print("[DEBUG] Mod script loaded successfully.")
 
--- Function to apply Gale_WildMagic passive if not already applied
-local function applyGaleWildMagic()
-    Ext.Utils.Print("[DEBUG] Applying Gale_WildMagic passive.")
-    if Osi.HasPassive(galeCharID, GALE_WILD_MAGIC_PASSIVE) == 0 and 
-       Osi.HasActiveStatus(galeCharID, GALE_WILDMAGIC_PERMANENT_REMOVAL) == 0 then
-        Osi.AddPassive(galeCharID, GALE_WILD_MAGIC_PASSIVE)
-        Ext.Utils.Print("[DEBUG] Gale_WildMagic applied.")
-    else
-        Ext.Utils.Print("[DEBUG] Gale_WildMagic not applied (already applied or permanently removed).")
-    end
-end
-
--- Function to remove Gale_WildMagic passive
-local function removeGaleWildMagic()
-    Ext.Utils.Print("[DEBUG] Removing Gale_WildMagic passive.")
-    if Osi.HasPassive(galeCharID, GALE_WILD_MAGIC_PASSIVE) == 1 then
-        Osi.RemovePassive(galeCharID, GALE_WILD_MAGIC_PASSIVE)
-        Ext.Utils.Print("[DEBUG] Gale_WildMagic removed.")
-    else
-        Ext.Utils.Print("[DEBUG] Gale_WildMagic was not active.")
-    end
-end
-
-local function updateMagicAllergy()
-    Ext.Utils.Print("[DEBUG] Updating Magic Allergy status.")
+-- Function to update statuses and passives
+local function updateMagicAllergyAndWildMagic()
+    Ext.Utils.Print("[DEBUG] Updating Magic Allergy and WildMagic statuses.")
 
     -- Check if any bomb status is active
     local hasBombStatus = Osi.HasActiveStatus(galeCharID, GALE_BOMB1_STATUS) == 1 or 
                           Osi.HasActiveStatus(galeCharID, GALE_BOMB2_STATUS) == 1 or 
                           Osi.HasActiveStatus(galeCharID, GALE_BOMB3_STATUS) == 1
 
+    -- Magic Allergy
     if hasBombStatus then
-        -- If any bomb status is active, ensure Magic Allergy is applied
         if Osi.HasPassive(galeCharID, GALE_MAGIC_ALLERGY_UNLOCK) == 0 then
             Osi.AddPassive(galeCharID, GALE_MAGIC_ALLERGY_UNLOCK)
             Ext.Utils.Print("[DEBUG] Magic Allergy applied.")
         end
     else
-        -- If no bomb statuses are active, ensure Magic Allergy is removed
         if Osi.HasPassive(galeCharID, GALE_MAGIC_ALLERGY_UNLOCK) == 1 then
             Osi.RemovePassive(galeCharID, GALE_MAGIC_ALLERGY_UNLOCK)
             Ext.Utils.Print("[DEBUG] Magic Allergy removed.")
         end
     end
+
+    -- Wild Magic
+    if hasBombStatus and Osi.HasActiveStatus(galeCharID, GALE_WILDMAGIC_PERMANENT_REMOVAL) == 0 then
+        if Osi.HasPassive(galeCharID, GALE_WILD_MAGIC_PASSIVE) == 0 then
+            Osi.AddPassive(galeCharID, GALE_WILD_MAGIC_PASSIVE)
+            Ext.Utils.Print("[DEBUG] Gale_WildMagic applied.")
+        end
+    else
+        if Osi.HasPassive(galeCharID, GALE_WILD_MAGIC_PASSIVE) == 1 then
+            Osi.RemovePassive(galeCharID, GALE_WILD_MAGIC_PASSIVE)
+            Ext.Utils.Print("[DEBUG] Gale_WildMagic removed.")
+        end
+    end
 end
 
-
--- Listener for Bomb statuses being applied or permanent removal
+-- Listener for Bomb statuses and permanent removal
 Ext.Osiris.RegisterListener("StatusApplied", 4, "after", function(target, status, _)
     if target == galeCharID then
         Ext.Utils.Print("[DEBUG] Status applied: " .. status)
 
-        if status == GALE_BOMB1_STATUS or status == GALE_BOMB2_STATUS or status == GALE_BOMB3_STATUS then
-            Ext.Utils.Print("[DEBUG] Bomb status detected. Applying Gale_WildMagic.")
-            applyGaleWildMagic()
-            updateMagicAllergy()
-        elseif status == GALE_WILDMAGIC_PERMANENT_REMOVAL then
-            Ext.Utils.Print("[DEBUG] Permanent removal status applied.")
-            removeGaleWildMagic()
-            updateMagicAllergy()
+        if status == GALE_BOMB1_STATUS or status == GALE_BOMB2_STATUS or status == GALE_BOMB3_STATUS or status == GALE_WILDMAGIC_PERMANENT_REMOVAL then
+            Ext.Utils.Print("[DEBUG] Relevant status detected. Updating statuses.")
+            updateMagicAllergyAndWildMagic()
         end
     end
 end)
 
--- Listener for Bomb statuses being removed
 Ext.Osiris.RegisterListener("StatusRemoved", 4, "after", function(target, status, _)
     if target == galeCharID then
         Ext.Utils.Print("[DEBUG] Status removed: " .. status)
 
         if status == GALE_BOMB1_STATUS or status == GALE_BOMB2_STATUS or status == GALE_BOMB3_STATUS then
-            Ext.Utils.Print("[DEBUG] Bomb status removed. Updating Magic Allergy.")
-            updateMagicAllergy()
+            Ext.Utils.Print("[DEBUG] Bomb status removed. Updating statuses.")
+            updateMagicAllergyAndWildMagic()
         end
 
         if status == GALE_BOMB3_STATUS then
             Ext.Utils.Print("[DEBUG] Bomb3 removed. Applying permanent removal.")
-            removeGaleWildMagic()
             Osi.ApplyStatus(galeCharID, GALE_WILDMAGIC_PERMANENT_REMOVAL, -1, 1)
         end
     end
 end)
 
+-- Listener for level gameplay start
 Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "after", function(level_name, is_editor_mode)
     Ext.Utils.Print("[DEBUG] LevelGameplayStarted triggered for level: " .. level_name)
     Ext.Utils.Print("[DEBUG] Checking statuses and passives for Gale.")
 
-    if Osi.HasActiveStatus(galeCharID, GALE_WILDMAGIC_PERMANENT_REMOVAL) == 1 then
-        Ext.Utils.Print("[DEBUG] Permanent removal detected. Ensuring passives are cleared.")
-        removeGaleWildMagic()
-        if Osi.HasPassive(galeCharID, GALE_MAGIC_ALLERGY_UNLOCK) == 1 then
-            Osi.RemovePassive(galeCharID, GALE_MAGIC_ALLERGY_UNLOCK)
-            Ext.Utils.Print("[DEBUG] Magic Allergy removed on gameplay start.")
-        end
-    else
-        if Osi.HasActiveStatus(galeCharID, GALE_BOMB1_STATUS) == 1 or 
-           Osi.HasActiveStatus(galeCharID, GALE_BOMB2_STATUS) == 1 or 
-           Osi.HasActiveStatus(galeCharID, GALE_BOMB3_STATUS) == 1 then
-            Ext.Utils.Print("[DEBUG] Bomb status detected on gameplay start. Applying Gale_WildMagic.")
-            applyGaleWildMagic()
-        end
-
-        updateMagicAllergy()
-    end
+    updateMagicAllergyAndWildMagic()
 end)
