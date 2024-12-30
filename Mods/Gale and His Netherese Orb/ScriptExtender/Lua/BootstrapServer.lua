@@ -116,11 +116,6 @@ Ext.Osiris.RegisterListener("StatusRemoved", 4, "after", function(target, status
     end
 end)
 
-Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "after", function()
-    --Ext.Utils.Print("Event triggered: LevelGameplayStarted")
-    updateLoneWolfStatus()
-end)
-
 -- Listener for when the level gameplay starts
 Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "after", function()
     -- Check if Gale has the GALE_GOON_MAGICALLERGY_UNLOCK passive
