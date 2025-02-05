@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<contentList>
+	<content contentuid="hbe617966gea3bg4c47g9ae3gfac48883ee31" version="1">A Magical Appetite</content>
+	<content contentuid="h5abfc877gb1cfg447bga8a8gb30b78064718" version="1">Gale's experiences of &lt;LSTag Tooltip="ORI_GALE_BOMB1"&gt;Arcane Hunger&lt;/LSTag&gt; have rendered his magic unstable.&lt;br&gt;&lt;br&gt;Each time he casts a spell of Level 1 or higher the magic might surge and trigger a random magical effect.</content>
+
+	<content contentuid="h00f4e0edg791fg424egafd1gc7cebdb56387" version="1">Gale's spirit is being drained. He has &lt;LSTag Tooltip="Disadvantage"&gt;Disadvantage&lt;/LSTag&gt; on &lt;LSTag Tooltip="Constitution"&gt;Constitution&lt;/LSTag&gt; &lt;LSTag Tooltip="SavingThrow"&gt;Saving Throws&lt;/LSTag&gt;.&lt;br&gt;&lt;br&gt;Gale's connection with the weave turns volatile, granting &lt;LSTag Tooltip="GOON_WEAVE_DEVOURING_AURA"&gt;Weave Devouring Aura&lt;/LSTag&gt;.</content>
+
+	<content contentuid="h299d5cbfgcce9g4756gaf06gf3098067bb37" version="1">The Netherese Orb in Gale's body is weakening him. He has &lt;LSTag Tooltip="Disadvantage"&gt;Disadvantage&lt;/LSTag&gt; on &lt;LSTag Tooltip="AttackRoll"&gt;Attack Rolls&lt;/LSTag&gt; and all &lt;LSTag Tooltip="SavingThrow"&gt;Saving Throws&lt;/LSTag&gt;.&lt;br&gt;&lt;br&gt;Gale's connection with the weave turns volatile, granting &lt;LSTag Tooltip="GOON_WEAVE_DEVOURING_AURA"&gt;Weave Devouring Aura&lt;/LSTag&gt;.</content>
+
+	<content contentuid="h95f2c1f4geab8g4a79g9ab0g621bd5654902" version="1">The Netherese Orb in Gale's body is severely weakening him. He has &lt;LSTag Tooltip="Disadvantage"&gt;Disadvantage&lt;/LSTag&gt; on &lt;LSTag Tooltip="AttackRoll"&gt;Attack Rolls&lt;/LSTag&gt; and all &lt;LSTag Tooltip="SavingThrow"&gt;Saving Throws&lt;/LSTag&gt;. His &lt;LSTag Tooltip="MovementSpeed"&gt;Movement Speed&lt;/LSTag&gt; is halved.&lt;br&gt;&lt;br&gt;Gale's connection with the weave turns volatile, granting &lt;LSTag Tooltip="GOON_WEAVE_DEVOURING_AURA"&gt;Weave Devouring Aura&lt;/LSTag&gt;.</content>
+</contentList>
