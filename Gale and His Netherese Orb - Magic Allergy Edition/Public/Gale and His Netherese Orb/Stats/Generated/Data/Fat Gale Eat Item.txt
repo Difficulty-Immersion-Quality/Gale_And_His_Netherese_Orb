@@ -3,7 +3,12 @@
 new entry "GOON_GALE_MAGICAL_APPETITE_UNLOCK"
 type "StatusData"
 data "StatusType" "BOOST"
-data "StatusPropertyFlags" "DisableOverhead;DisablePortraitIndicator;DisableCombatlog;ApplyToDead;IgnoreResting"
+// A Magical Appetite
+data "DisplayName" "hbe617966gea3bg4c47g9ae3gfac48883ee31"
+// Gale's experiences of &lt;LSTag Tooltip="ORI_GALE_BOMB1"&gt;Arcane Hunger&lt;/LSTag&gt; have rendered his magic unstable.&lt;br&gt;&lt;br&gt;Each time he casts a spell of Level 1 or higher the magic might surge and trigger a random magical effect.
+data "Description" "h5abfc877gb1cfg447bga8a8gb30b78064718"
+data "Icon" "PassiveFeature_WildMagicSurge"
+data "StatusPropertyFlags" "ApplyToDead;IgnoreResting"
 data "Passives" "Gale_WildMagic"
 
 new entry "Gale_WildMagic"
@@ -13,6 +18,7 @@ using "WildMagic"
 data "DisplayName" "hbe617966gea3bg4c47g9ae3gfac48883ee31"
 // Gale's experiences of &lt;LSTag Tooltip="ORI_GALE_BOMB1"&gt;Arcane Hunger&lt;/LSTag&gt; have rendered his magic unstable.&lt;br&gt;&lt;br&gt;Each time he casts a spell of Level 1 or higher the magic might surge and trigger a random magical effect.
 data "Description" "h5abfc877gb1cfg447bga8a8gb30b78064718"
+data "Properties" "IsHidden"
 
 // ==================================== Vanilla bomb statuses ====================================
 
@@ -20,34 +26,34 @@ new entry "ORI_GALE_BOMB1"
 type "StatusData"
 data "StatusType" "BOOST"
 using "ORI_GALE_BOMB1"
-// Gale's spirit is being drained. He has &lt;LSTag Tooltip="Disadvantage"&gt;Disadvantage&lt;/LSTag&gt; on &lt;LSTag Tooltip="Constitution"&gt;Constitution&lt;/LSTag&gt; &lt;LSTag Tooltip="SavingThrow"&gt;Saving Throws&lt;/LSTag&gt;.&lt;br&gt;&lt;br&gt;Gale's connection with the weave turns volatile, granting &lt;LSTag Tooltip="GOON_WEAVE_DEVOURING_AURA"&gt;Weave Devouring Aura&lt;/LSTag&gt; and &lt;LSTag Tooltip="GOON_MAGICALLERGY_AURA"&gt;Magic Allergy&lt;/LSTag&gt;.
+// Gale's spirit is being drained. He has &lt;LSTag Tooltip="Disadvantage"&gt;Disadvantage&lt;/LSTag&gt; on &lt;LSTag Tooltip="Constitution"&gt;Constitution&lt;/LSTag&gt; &lt;LSTag Tooltip="SavingThrow"&gt;Saving Throws&lt;/LSTag&gt;.&lt;br&gt;&lt;br&gt;Gale's connection with the weave turns volatile, granting &lt;LSTag Tooltip="GOON_MAGICALLERGY_AURA"&gt;Magic Allergy&lt;/LSTag&gt;.
 data "Description" "h00f4e0edg791fg424egafd1gc7cebdb56387"
 //
 data "OnApplyFunctors" "ApplyStatus(GOON_GALE_MAGICAL_APPETITE_UNLOCK,100,-1)"
 data "OnRemoveFunctors" ""
-data "Passives" "Goon_Weave_Devourer_Unlock;Goon_Magic_Allergy_Unlock"
+data "Passives" "Goon_Magic_Allergy_Unlock"
 
 new entry "ORI_GALE_BOMB2"
 type "StatusData"
 data "StatusType" "BOOST"
 using "ORI_GALE_BOMB2"
-// The Netherese Orb in Gale's body is weakening him. He has &lt;LSTag Tooltip="Disadvantage"&gt;Disadvantage&lt;/LSTag&gt; on &lt;LSTag Tooltip="AttackRoll"&gt;Attack Rolls&lt;/LSTag&gt; and all &lt;LSTag Tooltip="SavingThrow"&gt;Saving Throws&lt;/LSTag&gt;.&lt;br&gt;&lt;br&gt;Gale's connection with the weave turns volatile, granting &lt;LSTag Tooltip="GOON_WEAVE_DEVOURING_AURA"&gt;Weave Devouring Aura&lt;/LSTag&gt; and &lt;LSTag Tooltip="GOON_MAGICALLERGY_AURA"&gt;Magic Allergy&lt;/LSTag&gt;.
+// The Netherese Orb in Gale's body is weakening him. He has &lt;LSTag Tooltip="Disadvantage"&gt;Disadvantage&lt;/LSTag&gt; on &lt;LSTag Tooltip="AttackRoll"&gt;Attack Rolls&lt;/LSTag&gt; and all &lt;LSTag Tooltip="SavingThrow"&gt;Saving Throws&lt;/LSTag&gt;.&lt;br&gt;&lt;br&gt;Gale's connection with the weave turns volatile, granting &lt;LSTag Tooltip="GOON_MAGICALLERGY_AURA"&gt;Magic Allergy&lt;/LSTag&gt;.
 data "Description" "h299d5cbfgcce9g4756gaf06gf3098067bb37"
 //
 data "OnApplyFunctors" "ApplyStatus(GOON_GALE_MAGICAL_APPETITE_UNLOCK,100,-1)"
 data "OnRemoveFunctors" ""
-data "Passives" "Goon_Weave_Devourer_Unlock;Goon_Magic_Allergy_Unlock"
+data "Passives" "Goon_Magic_Allergy_Unlock"
 
 new entry "ORI_GALE_BOMB3"
 type "StatusData"
 data "StatusType" "BOOST"
 using "ORI_GALE_BOMB3"
-//The Netherese Orb in Gale's body is severely weakening him. He has &lt;LSTag Tooltip="Disadvantage"&gt;Disadvantage&lt;/LSTag&gt; on &lt;LSTag Tooltip="AttackRoll"&gt;Attack Rolls&lt;/LSTag&gt; and all &lt;LSTag Tooltip="SavingThrow"&gt;Saving Throws&lt;/LSTag&gt;. His &lt;LSTag Tooltip="MovementSpeed"&gt;Movement Speed&lt;/LSTag&gt; is halved.&lt;br&gt;&lt;br&gt;Gale's connection with the weave turns volatile, granting &lt;LSTag Tooltip="GOON_WEAVE_DEVOURING_AURA"&gt;Weave Devouring Aura&lt;/LSTag&gt; and &lt;LSTag Tooltip="GOON_MAGICALLERGY_AURA"&gt;Magic Allergy&lt;/LSTag&gt;.
+//The Netherese Orb in Gale's body is severely weakening him. He has &lt;LSTag Tooltip="Disadvantage"&gt;Disadvantage&lt;/LSTag&gt; on &lt;LSTag Tooltip="AttackRoll"&gt;Attack Rolls&lt;/LSTag&gt; and all &lt;LSTag Tooltip="SavingThrow"&gt;Saving Throws&lt;/LSTag&gt;. His &lt;LSTag Tooltip="MovementSpeed"&gt;Movement Speed&lt;/LSTag&gt; is halved.&lt;br&gt;&lt;br&gt;Gale's connection with the weave turns volatile, granting &lt;LSTag Tooltip="GOON_MAGICALLERGY_AURA"&gt;Magic Allergy&lt;/LSTag&gt;.
 data "Description" "h95f2c1f4geab8g4a79g9ab0g621bd5654902"
 //
 data "OnApplyFunctors" "ApplyStatus(GOON_GALE_MAGICAL_APPETITE_UNLOCK,100,-1)"
 data "OnRemoveFunctors" "RemoveStatus(GOON_GALE_MAGICAL_APPETITE_UNLOCK)"
-data "Passives" "Goon_Weave_Devourer_Unlock;Goon_Magic_Allergy_Unlock"
+data "Passives" "Goon_Magic_Allergy_Unlock"
 
 // ==================================== Not in use ====================================
 
