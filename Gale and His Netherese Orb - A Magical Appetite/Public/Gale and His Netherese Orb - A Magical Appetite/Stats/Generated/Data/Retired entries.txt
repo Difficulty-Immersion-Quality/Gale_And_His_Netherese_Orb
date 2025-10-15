@@ -1,0 +1,23 @@
+// ==================================== Retired entries ====================================
+
+new entry "GALE_GOON_MAGICALLERGY_UNLOCK_STATUS"
+type "StatusData"
+data "StatusType" "BOOST"
+data "StatusPropertyFlags" "DisableOverhead;DisablePortraitIndicator;DisableCombatlog"
+data "Passives" "GOON_MAGICALLERGY_UNLOCK"
+data "OnRemoveFunctors" "RemoveStatus(GOON_MAGICALLERGY_AURA)"
+data "StatusGroups" "SG_RemoveOnRespec"
+data "RemoveConditions" "not HasStatus('deeeeeeeeeznuuts')"
+data "RemoveEvents" "OnStatusApplied;OnStatusRemoved"
+
+new entry "GALE_GOON_MAGICALLERGY_UNLOCK"
+type "PassiveData"
+data "Properties" "IsHidden"
+
+new entry "GALE_WILDMAGIC_PERMANENT_REMOVAL"
+type "StatusData"
+data "StatusType" "BOOST"
+data "StatusPropertyFlags" "DisableOverhead;DisablePortraitIndicator;DisableCombatlog"
+data "StatusGroups" "SG_RemoveOnRespec"
+data "RemoveConditions" "not HasStatus('deeeeeeeeeznuuts')"
+data "RemoveEvents" "OnStatusApplied;OnStatusRemoved"
